@@ -1,0 +1,52 @@
+WindChest
+    lib         {所有依赖的jar包}
+        @struts2
+        @spring4
+        @hibernate5
+        @mysql-connector
+        @commons-dbcp
+        @log4j-slf4j
+    out         {编译输出打包}
+        artifacts
+            WindChest_war_exploded      {部署时的war包}
+        production
+        test
+    src         {Java源文件}
+        tk.kahsolt      {根包名}
+            windchest       {主类}
+                DAO
+                filters
+                listeners
+                servlets
+            windchest_test  {单元测试类}
+        struts.xml          <struts2配置>
+        spring.xml          <spring4配置>
+        hibernate.cfg.xml   <hibernate5配置>
+        log4j.properties
+    web         (网站根目录)
+        META-INF
+        WEB-INF
+            css
+                w3.css
+            img             (静态图片)
+            pages           (页面视图)
+                _error.jsp      [运行时错误页]
+                _error500.jsp   [服务器错误页]
+                _footer.jsp     [公用首部(导航/登录)]
+                _header.jsp     [公用尾部(版权)]
+                admin.jsp       [管理页]
+                index.jsp       [主页]
+                windchest.jsp   [对话页]
+            uploads         (用户上传目录)
+                audio           (音频)
+                img             (图片)
+                profile         (账户头像)
+                video           (视频)
+            web.xml         <Tomcat服务器配置>
+        index.jsp           [主页的直接跳转页]
+
+图例：
+    (小括号表示数据目录)
+    {大括号表示程序包目录}
+    [中括号表示页面文件]
+    <尖括号表示配置文件>

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://kahsolt.cc:3306/windchest</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">YLQ-kahsolt</property>
+
+        <!-- DB schema will be updated if needed -->
+        <property name="hbm2ddl.auto">update</property>
+        <property name="show_sql">true</property>
+
+        <!--数据表映射
+        <mapping class="DbUtils.ChestEntity"/>
+        <mapping resource="DbUtils/ChestEntity.hbm.xml"/>
+        <mapping class="DbUtils.UserEntity"/>
+        <mapping resource="DbUtils/UserEntity.hbm.xml"/>
+        <mapping class="DbUtils.WindEntity"/>
+        <mapping resource="DbUtils/WindEntity.hbm.xml"/>
+        -->
+    </session-factory>
+</hibernate-configuration>

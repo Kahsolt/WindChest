@@ -1,0 +1,22 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="WindChest:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/WindChest_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="WindChest/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="WindChest" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Hibernate 5.2.9-5.2.9" />
+          <element id="library" level="project" name="Struts 2-2.3.20.1" />
+          <element id="library" level="project" name="org.slf4j:slf4j-log4j12:1.7.25" />
+          <element id="library" level="project" name="mysql-connector-java-5.1.42-bin" />
+          <element id="library" level="project" name="spring-web-4.3.8.RELEASE" />
+          <element id="library" level="project" name="spring-expression-4.3.8.RELEASE" />
+          <element id="library" level="project" name="commons-dbcp:commons-dbcp:1.4" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

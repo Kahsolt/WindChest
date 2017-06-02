@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:mysql://kahsolt.cc/ssh?characterEncoding=utf-8</value>
+        </property>
+        <property name="username">
+            <value>wind</value>
+        </property>
+        <property name="password">
+            <value>chest</value>
+        </property>
+    </bean>
+
+    <!--配置SessionFactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" lazy-init="false">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+        <property name="mappingLocations" value="classpath:tk/kahsolt/windchest/DAO/*.hbm.xml"></property>
+    </bean>
+
+    <!-- 事务管理 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+    </bean>
+
+    <!-- 配置数据持久层 -->
+    <bean id="userDao" class="com.ssh.dao.impl.UserDaoImpl">
+        <property name="hibernateTemplate" ref="hibernateTemplate"></property>
+    </bean>
+    <!-- 配置业务逻辑层 -->
+    <bean id="userService" class="com.ssh.service.impl.UserServiceImpl">
+        <property name="userDao" ref="userDao"></property>
+    </bean>
+    <!-- 配置控制层 -->
+    <bean id="UserAction" class="com.ssh.action.UserAction"  scope="prototype">
+        <property name="userService" ref="userService"></property>
+    </bean>
+    <!-- 配置pojo -->
+    <bean id="User" class="com.ssh.pojo.User" scope="prototype"/>
+
+</beans>
