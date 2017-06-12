@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="tk.kahsolt.windchest.entity.ChestEntity" table="chest" schema="windchest">
+        <id name="fid">
+            <column name="fid" sql-type="int(11)"/>
+        </id>
+        <property name="uid">
+            <column name="uid" sql-type="int(11)"/>
+        </property>
+        <property name="name">
+            <column name="name" sql-type="varchar(64)" length="64"/>
+        </property>
+    </class>
+    <class name="tk.kahsolt.windchest.entity.UserEntity" table="user" schema="windchest">
+        <id name="uid">
+            <column name="uid" sql-type="int(11)"/>
+        </id>
+        <property name="username">
+            <column name="username" sql-type="varchar(32)" length="32"/>
+        </property>
+        <property name="nickname">
+            <column name="nickname" sql-type="varchar(32)" length="32" not-null="false"/>
+        </property>
+        <property name="password">
+            <column name="password" sql-type="varchar(32)" length="32"/>
+        </property>
+        <property name="email">
+            <column name="email" sql-type="varchar(64)" length="64" not-null="false"/>
+        </property>
+        <property name="avatar">
+            <column name="avatar" sql-type="varchar(512)" length="512" not-null="false"/>
+        </property>
+    </class>
+    <class name="tk.kahsolt.windchest.entity.WindEntity" table="wind" schema="windchest">
+        <id name="wid">
+            <column name="wid" sql-type="int(11)"/>
+        </id>
+        <property name="uid">
+            <column name="uid" sql-type="int(11)"/>
+        </property>
+        <property name="chest">
+            <column name="chest" sql-type="varchar(64)" length="64"/>
+        </property>
+        <property name="type">
+            <column name="type" sql-type="char(16)" length="16" not-null="true"/>
+        </property>
+        <property name="text">
+            <column name="text" sql-type="text" not-null="true"/>
+        </property>
+        <property name="path">
+            <column name="path" sql-type="varchar(512)" length="512" not-null="false"/>
+        </property>
+        <property name="time">
+            <column name="time" sql-type="timestamp"/>
+        </property>
+    </class>
+</hibernate-mapping>

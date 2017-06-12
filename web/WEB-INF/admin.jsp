@@ -7,9 +7,11 @@
 --%>
 
 <%-- Admin page --%>
+<%@ page contentType="text/html; charset=utf-8" language="java" %>
+<%@ page errorPage="_error.jsp" %>
 
 <!-- Header Navigator -->
-<jsp:include page="_header.jsp" flush="true"/>
+<%@ include file="_header.jsp"%>
 
 <!-- Content Body -->
 <article class="w3-content">
@@ -19,4 +21,4 @@
 </article>
 
 <!-- Footer Copyright-->
-<jsp:include page="_footer.jsp"/>
+<%@ include file="_footer.jsp"%>

@@ -7,4 +7,4 @@
 --%>
 
 <!-- Directly Forward for safety -->
-<jsp:forward page="WEB-INF/pages/index.jsp" />
+<jsp:forward page="WEB-INF/index.jsp" />

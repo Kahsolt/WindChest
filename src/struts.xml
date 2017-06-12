@@ -5,15 +5,50 @@
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 
 <struts>
-    <package name="tk.kahsolt.windchest.struts" namespace="/" extends="struts-default">
+    <constant name="struts.objectFactory" value="spring"/>
+    <constant name="struts.action.extension" value="action"/>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.serve.static.browserCache" value="false" />
+    <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
+    <constant name="struts.multipart.saveDir" value="/tmp/"/>
+    <constant name="struts.multipart.maxSize" value="52428800"/>
+    <constant name="struts.configuration.xml.reload" value="true"/>
+    <constant name="struts.devMode" value="true"/>
 
-        <!--此处配置若干个struts中的若干个Action-->
-        <!--
-        <action name="Login" class="tk.kahsolt.windchest.servlets.TestServlet">
-            <result name="success">/index.jsp</result>
-            <result name="error">/index.jsp</result>
+    <package name="tk.kahsolt.windchest" namespace="/" extends="struts-default" strict-method-invocation="false">
+
+        <!--此处配置若干个struts的若干个Action-->
+        <action name="Login" class="userAction" method="login">
+            <result name="success">WEB-INF/windchest.jsp</result>
+            <result name="error">WEB-INF/index.jsp</result>
         </action>
-        -->
-    </package>
-</struts>
+        <action name="Logout" class="userAction" method="logout">
+            <result>index.jsp</result>
+        </action>
+        <action name="Signin" class="userAction" method="signin">
+            <result name="success">WEB-INF/windchest.jsp</result>
+            <result name="error">index.jsp</result>
+        </action>
+        <action name="Leaveout" class="userAction" method="leaveout">
+            <result name="success">index.jsp</result>
+            <result name="error">index.jsp</result>
+        </action>
 
+        <action name="Enter" class="chestAction" method="enter">
+            <result>WEB-INF/windchest.jsp</result>
+        </action>
+        <action name="Leave" class="chestAction" method="leave">
+            <result>index.jsp</result>
+        </action>
+
+        <action name="Upload" class="uploadAction">
+            <result name="success">WEB-INF/windchest.jsp</result>
+            <result name="error">WEB-INF/windchest.jsp?error=upload</result>
+            <interceptor-ref name="fileUploadStack">
+                <param name="fileUpload.maximumSize">52428800</param>
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack" />
+        </action>
+    </package>
+
+</struts>

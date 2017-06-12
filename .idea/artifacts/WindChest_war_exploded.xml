@@ -8,13 +8,17 @@
           <element id="module-output" name="WindChest" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="Hibernate 5.2.9-5.2.9" />
+          <element id="library" level="project" name="Hibernate 4.2.2-4.2.2" />
+          <element id="library" level="application" name="mysql:mysql-connector-java:5.1.42" />
+          <element id="library" level="project" name="Spring-4.2.9.RELEASE" />
           <element id="library" level="project" name="Struts 2-2.3.20.1" />
-          <element id="library" level="project" name="org.slf4j:slf4j-log4j12:1.7.25" />
-          <element id="library" level="project" name="mysql-connector-java-5.1.42-bin" />
-          <element id="library" level="project" name="spring-web-4.3.8.RELEASE" />
-          <element id="library" level="project" name="spring-expression-4.3.8.RELEASE" />
-          <element id="library" level="project" name="commons-dbcp:commons-dbcp:1.4" />
+          <element id="library" level="project" name="org.springframework:spring-web:4.2.9.RELEASE" />
+          <element id="library" level="project" name="slf4j-api-1.7.2" />
+          <element id="library" level="project" name="struts2-spring-plugin-2.3.20.1" />
+          <element id="library" level="application" name="Tomcat9" />
+          <element id="library" level="project" name="commons-beanutils-1.9.2" />
+          <element id="library" level="project" name="juli-6.0.18" />
+          <element id="library" level="project" name="aspectjweaver-1.5.3" />
         </element>
       </element>
     </root>

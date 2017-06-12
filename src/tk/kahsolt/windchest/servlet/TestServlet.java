@@ -1,4 +1,4 @@
-package tk.kahsolt.windchest.servlets;
+package tk.kahsolt.windchest.servlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +24,6 @@ public class TestServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
 
         PrintWriter pw = response.getWriter();
-        pw.write("<p>Ok Test Servlet!</p>");
+        pw.write("<p>Ok, Test Servlet!</p>");
     }
 }

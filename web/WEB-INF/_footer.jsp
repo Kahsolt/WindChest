@@ -5,10 +5,8 @@
   Time: 上午5:43
   To change this template use File | Settings | File Templates.
 --%>
-
-<footer class="w3-container">
-    <p class="w3-right">Powered by Kahsolt</p>
-</footer>
+<%@ page contentType="text/html; charset=utf-8" language="java" %>
+<%@ page errorPage="_error.jsp" %>
 
 </body>
 </html>

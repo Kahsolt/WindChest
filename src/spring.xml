@@ -1,51 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!-- 配置数据源 -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName">
-            <value>com.mysql.jdbc.Driver</value>
-        </property>
-        <property name="url">
-            <value>jdbc:mysql://kahsolt.cc/ssh?characterEncoding=utf-8</value>
-        </property>
-        <property name="username">
-            <value>wind</value>
-        </property>
-        <property name="password">
-            <value>chest</value>
-        </property>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://kahsolt.cc:3306/windchest"/>
+        <property name="username" value="wind"/>
+        <property name="password" value="chest"/>
     </bean>
 
     <!--配置SessionFactory -->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" lazy-init="false">
-        <property name="dataSource" ref="dataSource" />
-        <property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
-        <property name="mappingLocations" value="classpath:tk/kahsolt/windchest/DAO/*.hbm.xml"></property>
-    </bean>
-
-    <!-- 事务管理 -->
-    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory">
-            <ref bean="sessionFactory" />
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" lazy-init="false">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+        <!-- <property name="mappingLocations" value="classpath:hibernate.hbm.xml"/> -->
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+            </props>
         </property>
     </bean>
 
-    <!-- 配置数据持久层 -->
-    <bean id="userDao" class="com.ssh.dao.impl.UserDaoImpl">
-        <property name="hibernateTemplate" ref="hibernateTemplate"></property>
+    <!-- 事务管理 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="autodetectDataSource" value="false" />
     </bean>
-    <!-- 配置业务逻辑层 -->
-    <bean id="userService" class="com.ssh.service.impl.UserServiceImpl">
-        <property name="userDao" ref="userDao"></property>
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*"/>
+            <tx:method name="save*"/>
+            <tx:method name="del*"/>
+            <tx:method name="remove*"/>
+            <tx:method name="update*"/>
+            <tx:method name="edit*"/>
+            <tx:method name="modify*"/>
+            <tx:method name="repair"/>
+            <tx:method name="deleteAndRepair"/>
+
+            <tx:method name="get*" propagation="SUPPORTS"/>
+            <tx:method name="find*" propagation="SUPPORTS"/>
+            <tx:method name="search*" propagation="SUPPORTS"/>
+            <tx:method name="*" propagation="SUPPORTS"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:pointcut id="transactionPointcut" expression="execution(* tk.kahsolt.windchest.service.*.*(..))"/>
+        <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
+    </aop:config>
+
+    <!--Entity Bean-->
+    <bean id="user" class="tk.kahsolt.windchest.entity.UserEntity"/>
+    <bean id="wind" class="tk.kahsolt.windchest.entity.WindEntity"/>
+    <bean id="chest" class="tk.kahsolt.windchest.entity.ChestEntity"/>
+    <!-- IoC -->
+    <bean id="userDao" class="tk.kahsolt.windchest.DAO.UserDAO">
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
-    <!-- 配置控制层 -->
-    <bean id="UserAction" class="com.ssh.action.UserAction"  scope="prototype">
-        <property name="userService" ref="userService"></property>
+    <bean id="userService" class="tk.kahsolt.windchest.service.UserService">
+        <property name="UserDao" ref="userDao"/>
     </bean>
-    <!-- 配置pojo -->
-    <bean id="User" class="com.ssh.pojo.User" scope="prototype"/>
+    <bean id="userAction" class="tk.kahsolt.windchest.action.UserAction">
+        <property name="UserService" ref="userService"/>
+    </bean>
+
+    <bean id="uploadAction" class="tk.kahsolt.windchest.action.UploadAction"/>
+
+    <bean id="windDao" class="tk.kahsolt.windchest.DAO.WindDAO">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="windService" class="tk.kahsolt.windchest.service.WindService">
+        <property name="WindDao" ref="windDao"/>
+    </bean>
+
+    <bean id="chestAction" class="tk.kahsolt.windchest.action.ChestAction">
+        <property name="UserService" ref="userService"/>
+    </bean>
+
+    <bean id="windchest" class="tk.kahsolt.windchest.websocket.WindChest">
+        <property name="User" ref="user"/>
+    </bean>
+
+    <!--
+    <bean id="uploadServlet" class="tk.kahsolt.windchest.servlet.UploadServlet">
+        <property name="WindDao" ref="windDao"/>
+    </bean>
+    -->
 
 </beans>

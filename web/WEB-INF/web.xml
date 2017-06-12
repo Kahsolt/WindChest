@@ -3,11 +3,27 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    
+
     <!--应用描述信息-->
     <display-name>WindChest</display-name>
     <description>Simple Message Deliverer</description>
-    
+
+    <!--服务器参数-->
+    <context-param>
+        <param-name>org.apache.tomcat.websocket.textBufferSize</param-name>
+        <param-value>10240</param-value>
+    </context-param>
+    <context-param>
+        <param-name>org.apache.tomcat.websocket.binaryBufferSize</param-name>
+        <param-value>32768</param-value>
+    </context-param>
+
+    <!--Spring4配置文件-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring.xml</param-value>
+    </context-param>
+
     <!--欢迎页-->
     <welcome-file-list>
         <welcome-file>/index.jsp</welcome-file>
@@ -15,23 +31,30 @@
     <!--错误页-->
     <error-page>
         <error-code>404</error-code>
-        <location>/WEB-INF/pages/index.jsp</location>
+        <location>/WEB-INF/index.jsp</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
-        <location>/WEB-INF/pages/_error500.jsp</location>
+        <location>/WEB-INF/_error.jsp</location>
     </error-page>
 
-    <!--控制器Servlet
+    <!--服务端小程序-->
     <servlet>
-        <servlet-name>index</servlet-name>
-        <jsp-file>/index.jsp</jsp-file>
+        <servlet-name>test</servlet-name>
+        <servlet-class>tk.kahsolt.windchest.servlet.TestServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>index</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <servlet-name>test</servlet-name>
+        <url-pattern>/test</url-pattern>
     </servlet-mapping>
-    -->
+    <servlet>
+        <servlet-name>upload</servlet-name>
+        <servlet-class>tk.kahsolt.windchest.servlet.UploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>upload</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
 
     <!--拦截器-->
     <filter>
@@ -42,11 +65,18 @@
         <filter-name>struts2</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>tk.kahsolt.windchest.filter.EncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-    <!--监听器
+    <!--监听器-->
     <listener>
-        <listener-class></listener-class>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-    -->
 
 </web-app>

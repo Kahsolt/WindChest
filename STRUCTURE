@@ -26,23 +26,23 @@ WindChest
     web         (网站根目录)
         META-INF
         WEB-INF
-            css
-                w3.css
-            img             (静态图片)
-            pages           (页面视图)
-                _error.jsp      [运行时错误页]
-                _error500.jsp   [服务器错误页]
-                _footer.jsp     [公用首部(导航/登录)]
-                _header.jsp     [公用尾部(版权)]
-                admin.jsp       [管理页]
-                index.jsp       [主页]
-                windchest.jsp   [对话页]
-            uploads         (用户上传目录)
-                audio           (音频)
-                img             (图片)
-                profile         (账户头像)
-                video           (视频)
+            _error.jsp      [运行时错误页]
+            _error500.jsp   [服务器错误页]
+            _footer.jsp     [公用首部(导航/登录)]
+            _header.jsp     [公用尾部(版权)]
+            admin.jsp       [管理页]
+            index.jsp       [主页]
+            windchest.jsp   [对话页]
             web.xml         <Tomcat服务器配置>
+        uploads         (用户上传目录)
+            avatar          (账户头像)
+            audio           (音频)
+            img             (图片)
+            video           (视频)
+        img             (静态图片)
+            logo.jpg
+        css
+            w3.css
         index.jsp           [主页的直接跳转页]
 
 图例：
