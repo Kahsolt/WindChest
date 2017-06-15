@@ -14,6 +14,10 @@
 <!-- Header Navigator -->
 <%@ include file="_header.jsp"%>
 
+<%!boolean isUploadError=false;%>
+<%
+    isUploadError=request.getParameter("isUploadError")!=null;
+%>
 <!-- Content Body -->
 <article class="w3-content">
     <section class="w3-container w3-margin-top">
@@ -26,15 +30,18 @@
             </div>
             <div class="w3-quarter">
 <%if(!guest) {%>
-                <form action="Upload.action" target="view_frame" method="post" enctype="multipart/form-data">
-                    <input name="file" class="w3-input" type="file">
+                <form id="form_upload" action="Upload.action" target="view_frame" method="post" enctype="multipart/form-data">
+                    <input id="file" name="file" class="w3-input" type="file">
                     <div class="w3-row">
-                        <input id="send" class="w3-input w3-blue w3-half" type="button" onclick="send();" value="发送">
+                        <input class="w3-input w3-blue w3-half" type="button" onclick="send();" value="发送">
                         <input id="upload" class="w3-input w3-indigo w3-half" type="submit" value="上传">
                     </div>
                 </form>
 <%} else {%>
-                <input id="send" class="w3-input w3-blue" type="button" onclick="send();" value="发送">
+                <div class="w3-center">
+                    <input class="w3-input w3-blue" type="button" onclick="send();" value="发送">
+                    <p class="w3-text-blue">注册玩家还能发送文件哟～</p>
+                </div>
 <%}%>
             </div>
         </div>
@@ -48,25 +55,32 @@
 <script>
     function $(id) { return document.getElementById(id); }
 
+<%
+    if (!guest) out.println("var uid="+user.getUid()+";");
+    out.println("var username='"+username+"';");
+%>
     var isGreeted=false;
+    var isWebsocketErrored=false;
     var isReconnected=false;
     var reconnectTimes=10;
     var ws=null;
     var wsUrl='ws://localhost:8080/windchest';
-    //var wsUrl='ws://echo.websocket.org/echo';
     //var wsUrl='ws://windchest.kahsolt.cc:8080/windchest';
 
     function initWebSocket() {
         if(!window.WebSocket) {
-            alert("您的浏览器不支持WebSocket，请用Chrome!!");
+            alert("啊哦，您的浏览器不支持WebSocket，推荐用Chrome……");
             return;
         } else {
             if(reconnectTimes>0) {
                 reconnectTimes-=1;
+                if(ws!==null) {
+                    ws.close();
+                }
                 ws=new WebSocket(wsUrl);
             } else {
                 if(!isReconnected) {
-                    log("[System] 啊哦连接断了，请刷新页面……");
+                    log("[System] 啊哦，连接断了，请刷新页面……");
                     isReconnected=true;
                 }
             }
@@ -81,12 +95,21 @@
             initWebSocket();
         };
         ws.onerror=function(e) {
-            log("[System] Websocket错误! ",e);
+            if(!isWebsocketErrored) {
+                log("[System] Websocket错误! ",e);
+                isWebsocketErrored=true;
+            }
             initWebSocket();
         };
         ws.onmessage=function (e) {
             log(e.data);
         };
+    }
+    function reinitWebsocket() {
+        if(ws!==null) {
+            ws.close();
+        }
+        ws=new WebSocket(wsUrl);
     }
     function initFileDrag() {
         document.ondrop=function (e) {
@@ -133,6 +156,11 @@
             send();
         }
     }
+<%if(!guest) {%>
+    function forward(wid) {
+        window.open('Mail.action?wid='+wid+'&uid='+uid);
+    }
+<%}%>
     function log(msg) {
         var console=$('console');
         if(msg instanceof Blob){
@@ -142,6 +170,7 @@
             img.classList.add('w3-border-light-blue');
             img.classList.add('w3-pale-blue');
             img.classList.add('w3-round');
+            img.style.width='auto';
             img.src=window.URL.createObjectURL(msg);
             console.appendChild(img);
         } else {
@@ -151,17 +180,34 @@
             p.classList.add('w3-border-light-blue');
             p.classList.add('w3-sand');
             p.classList.add('w3-round');
+            p.classList.add('w3-large');
+            //p.classList.add('w3-show-inline-block');
             p.style.wordWrap='break-word';
-            p.innerHTML=msg;
+            p.style.width='auto';
+            if(detectUrl(msg)) {
+                var a=document.createElement('a');
+                a.classList.add('w3-text-indigo');
+                a.href=msg;
+                a.setAttribute("target", "_blank");
+                a.innerHTML=msg;
+                p.appendChild(a);
+            } else {
+                p.innerHTML=msg;
+            }
             console.appendChild(p);
         }
-        while(console.childNodes.length>75) {
+        while(console.childNodes.length>35) {
             console.removeChild(console.firstChild);
         }
         console.scrollTop=console.scrollHeight;
+        //console.scrollIntoView();
     }
     function trimMessage(msg) {
         return msg.replace(/^[\s\r\n]+/,'').replace(/[\s\r\n]+$/,'');
+    }
+    function detectUrl(msg) {
+        var isUrl = msg.match(/^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/);
+        return (isUrl!==null);
     }
     function handleFileDrop(file) {
         var reader=new FileReader();
@@ -170,13 +216,6 @@
             ws.send(reader.result);
             log('Sending File: '+file.name);
         };
-        //Ajax上传
-//        var xhr = new XMLHttpRequest();
-//        xhr.open("post", "upload", true);
-//        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-//        var fd = new FormData();
-//        fd.append('file', file);
-//        xhr.send(fd);
     }
 
     //Main Entry
@@ -187,6 +226,9 @@
 </script>
 
 <style>
+    a {
+        cursor: pointer;
+    }
     #console {
         height: 380px;
         word-break: break-all;
@@ -203,7 +245,6 @@
         overflow-x: auto;
         overflow-y: scroll;
     }
-    /*
     #file {
         position: relative;
         display: inline-block;
@@ -226,7 +267,6 @@
         color: #004974;
         text-decoration: none;
     }
-    */
 </style>
 
 <!-- Footer Copyright-->

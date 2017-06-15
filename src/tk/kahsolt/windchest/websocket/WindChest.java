@@ -110,23 +110,34 @@ public class WindChest{
                     } else if(msg instanceof ByteBuffer) {
                         client.session.getBasicRemote().sendBinary((ByteBuffer)msg);
                     } else if(msg instanceof WindEntity) {  // Media
+                        int wid = ((WindEntity) msg).getWid();
                         String src = ((WindEntity) msg).getPath();
+                        String text = ((WindEntity) msg).getText();
                         String mark = "";
-                        switch (((WindEntity) msg).getType()) {
+                        switch (((WindEntity)msg).getType()) {
                             case "image":
-                                mark = String.format("<img src=\"../%s\" />", src);
+                                mark = String.format("<img style=\"max-width:100%%;\" src=\"..%s\" alt=\"%s\" />", src, text);
                                 client.session.getBasicRemote().sendText(mark);
                                 break;
                             case "audio":
-                                mark = String.format("<audio src=\"../%s\" />", src);
+                                mark = String.format("<p class=\"w3-dropdown-hover\" style=\"align:center;\">%s  " +
+                                        "<a style=\"cursor:pointer;\" class=\"w3-text-blue w3-dropdown-content w3-border\" onclick=\"forward(%d);\">转发到邮箱</a></p>" +
+                                        "<br/><audio style=\"max-width:100%%;\" src=\"..%s\" controls=\"controls\"/>",
+                                        text, wid, src);
                                 client.session.getBasicRemote().sendText(mark);
                                 break;
                             case "video":
-                                mark = String.format("<video src=\"../%s\" />", src);
+                                mark = String.format("<p class=\"w3-dropdown-hover\" style=\"align:center;\">%s  " +
+                                        "<a style=\"cursor:pointer;\" class=\"w3-text-blue w3-dropdown-content w3-border\" onclick=\"forward(%d);\">转发到邮箱</a></p>" +
+                                        "<br/><video style=\"max-width:100%%;\" src=\"..%s\" controls=\"controls\"/>",
+                                        text, wid, src);
                                 client.session.getBasicRemote().sendText(mark);
                                 break;
                             default:
-                                log.error("Unknown WindEntity Type!");
+                                mark = String.format("<a style=\"cursor:pointer;\" href=\"..%s\">[文件] %s:</a><p class=\"w3-dropdown-hover\"><img src=\"../img/file.jpg\"/>" +
+                                        "<a class=\"w3-text-blue w3-dropdown-content w3-border\" onclick=\"forward(%d);\">转发到邮箱</a></p>",
+                                        text, src, wid);
+                                client.session.getBasicRemote().sendText(mark);
                                 break;
                         }
 

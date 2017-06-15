@@ -17,12 +17,14 @@
 <article class="w3-content">
     <div class="w3-container">
         <div class="w3-container w3-center w3-opacity w3-padding-jumbo  w3-margin-bottom">
-            <p id="sitename" class="w3-text-blue w3-jumbo"">WindChest</p>
+            <p id="sitename" class="w3-text-blue w3-jumbo">WindChest</p>
             <p id="siteinfo" class="w3-text-blue w3-xlarge">Simple message deliverer...</p>
         </div>
         <div class="w3-container w3-center w3-opacity w3-padding-tiny">
-            <a class="w3-btn w3-blue w3-xlarge w3-round" onclick="modelManager('modelLogin','open')">登录</a>
-            <a class="w3-btn w3-indigo w3-xlarge w3-round" onclick="modelManager('modelSignin','open')">注册</a>
+            <form class="w3-form" action="Enter.action" method="post">
+                <input name="chest.name" type="hidden" value="DefaultChest">
+                <input class="w3-btn w3-blue w3-xlarge w3-round"type="submit" value="开始">
+            </form>
         </div>
     </div>
 </article>

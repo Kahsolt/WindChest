@@ -5,6 +5,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import org.apache.catalina.User;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.stereotype.Repository;
+import sun.nio.cs.US_ASCII;
 import tk.kahsolt.windchest.entity.UserEntity;
 import tk.kahsolt.windchest.service.UserService;
 
@@ -89,9 +90,9 @@ public class UserAction extends ActionSupport{
     }
 
     @Action
-    public String updateinfo() {
+    public String settings() {
         Map session = ActionContext.getContext().getSession();
-        UserEntity newUser=userService.updateinfo(user);
+        UserEntity newUser=userService.updateinfo(user, (UserEntity)session.get("user"));
         if(newUser!=null) {
             session.put("user", newUser);
             return SUCCESS;

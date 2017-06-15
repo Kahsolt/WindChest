@@ -17,6 +17,14 @@ public class WindService {
     public WindDAO getWindDao() { return windDao; }
     public void setWindDao(WindDAO windDao) { this.windDao = windDao; }
 
+    public void save(WindEntity wind) {
+        windDao.save(wind);
+    }
+
+    public WindEntity getWindByText(String text) {
+        return (WindEntity)(windDao.findByText(text).get(0));
+    }
+
     public void format(WindEntity windEntity) {
         switch (windEntity.getType()) {
             case "text":

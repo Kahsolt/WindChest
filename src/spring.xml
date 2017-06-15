@@ -17,15 +17,30 @@
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" lazy-init="false">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
-        <!-- <property name="mappingLocations" value="classpath:hibernate.hbm.xml"/> -->
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.connection.url">jdbc:mysql://kahsolt.cc:3306/windchest</prop>
+                <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
             </props>
         </property>
+        <!--
+        <property name="annotatedClasses">
+            <list>
+                <value>tk.kahsolt.windchest.entity.ChestEntity</value>
+                <value>tk.kahsolt.windchest.entity.UserEntity</value>
+                <value>tk.kahsolt.windchest.entity.WindEntity</value>
+            </list>
+        </property>
+        <property name="mappingLocations">
+            <list>
+                <value>classpath:hibernate.hbm.xml</value>
+            </list>
+        </property>
+        -->
     </bean>
 
     <!-- 事务管理 -->
@@ -65,33 +80,30 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
     <bean id="userService" class="tk.kahsolt.windchest.service.UserService">
-        <property name="UserDao" ref="userDao"/>
+        <property name="userDao" ref="userDao"/>
     </bean>
     <bean id="userAction" class="tk.kahsolt.windchest.action.UserAction">
-        <property name="UserService" ref="userService"/>
+        <property name="userService" ref="userService"/>
     </bean>
-
-    <bean id="uploadAction" class="tk.kahsolt.windchest.action.UploadAction"/>
 
     <bean id="windDao" class="tk.kahsolt.windchest.DAO.WindDAO">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
     <bean id="windService" class="tk.kahsolt.windchest.service.WindService">
-        <property name="WindDao" ref="windDao"/>
+        <property name="windDao" ref="windDao"/>
+    </bean>
+    <bean id="uploadAction" class="tk.kahsolt.windchest.action.UploadAction">
+        <property name="windService" ref="windService"/>
+        <property name="wind" ref="wind"/>
     </bean>
 
     <bean id="chestAction" class="tk.kahsolt.windchest.action.ChestAction">
-        <property name="UserService" ref="userService"/>
+        <property name="userService" ref="userService"/>
     </bean>
 
-    <bean id="windchest" class="tk.kahsolt.windchest.websocket.WindChest">
-        <property name="User" ref="user"/>
+    <bean id="mailAction" class="tk.kahsolt.windchest.action.MailAction">
+        <property name="userDao" ref="userDao"/>
+        <property name="windDao" ref="windDao"/>
     </bean>
-
-    <!--
-    <bean id="uploadServlet" class="tk.kahsolt.windchest.servlet.UploadServlet">
-        <property name="WindDao" ref="windDao"/>
-    </bean>
-    -->
 
 </beans>

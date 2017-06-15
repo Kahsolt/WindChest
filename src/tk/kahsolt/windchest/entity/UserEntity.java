@@ -3,7 +3,7 @@ package tk.kahsolt.windchest.entity;
 import javax.persistence.*;
 
 /**
- * Created by kahsolt on 17-6-11.
+ * Created by kahsolt on 17-6-13.
  */
 @Entity
 @Table(name = "user", schema = "windchest", catalog = "")

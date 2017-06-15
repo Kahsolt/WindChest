@@ -15,14 +15,21 @@
 <%!boolean guest = true;%>
 <%!UserEntity user = null;%>
 <%!String username = "";%>
+<%!String chest = "Default";%>
+<%!boolean msgInfo = false;%>
+<%!boolean msgError = false;%>
+<%!String msg = "";%>
 <%
     guest = session.getAttribute("user")==null;
+    msg = (String) request.getAttribute("msg");
     loginerror = request.getAttribute("loginerror")!=null && (boolean)request.getAttribute("loginerror");
     signinerror = request.getAttribute("signinerror")!=null && (boolean)request.getAttribute("signinerror");
+    msgInfo = request.getAttribute("msgInfo")!=null && (boolean)request.getAttribute("msgInfo");
+    msgError = request.getAttribute("msgError")!=null && (boolean)request.getAttribute("msgError");
 
     if(guest) { //设置为访客
         user=new UserEntity();
-        user.setNickname("New Windchaser?");
+        user.setNickname("无名的捕风者");
     } else {
         user=(UserEntity)session.getAttribute("user");
     }
@@ -31,10 +38,6 @@
     } else {
         username = user.getUsername();
     }
-%>
-
-<%!String chest = " ";%>
-<%
     if(session.getAttribute("chest") != null) {
         chest = (String)session.getAttribute("chest");
     }
@@ -53,23 +56,14 @@
 
 <nav class="w3-card-4 w3-blue w3-large">
     <ul class="w3-navbar w3-padding-tiny">
-        <li><a class="w3-text-white w3-large" onclick="confirmLeave();">WindChest</a><li>
+        <li><a class="w3-text-white w3-large" onclick="reinitWebsocket();">WindChest</a><li>
 <% if(!guest) {%>
         <li class="w3-right">
             <div class="w3-dropdown-hover">
-                <p class="w3-hoverable">收藏</p>
+                <a class="w3-blue">&nbsp;<%=username%>&nbsp;</a>
+                <!-- <img src="<%=user.getAvatar()%>" alt="avatar" height="48"> -->
                 <div class="w3-dropdown-content w3-border">
-                    <a href="#">Chest1</a>
-                    <a href="#">Chest2</a>
-                </div>
-            </div>
-            <div class="w3-dropdown-hover">
-                <div style="vertical-align: middle;">
-                    <a class="w3-show-inline-block"><%=username%></a>
-                    <img src="<%=user.getAvatar()%>" alt="avatar" height="48">
-                </div>
-                <div class="w3-dropdown-content w3-border">
-                    <a onclick="modelManager('modelSettings','open')">设置</a>
+                    <a class="w3-hover-blue" onclick="modelManager('modelSettings','open')">设置</a>
                     <a class="w3-light-grey w3-hover-red" onclick="confirmLogout();">注销</a>
                 </div>
             </div>
@@ -86,9 +80,28 @@
         </li>
 <%}%>
     </ul>
+</nav>
 
-    <!-- Modal： Login -->
-<%if(user!=null) {%>
+<article>
+<!-- Message Banner-->
+<%if(false) {%>
+    <div id="msgInfo" class="w3-modal" onclick="closeMsg('msgInfo')" style="display: block; cursor: pointer;">
+        <div class="w3-container w3-modal-content w3-leftbar w3-border-blue w3-light-blue">
+            <h4>提示: </h4>
+            <p class="w3-container w3-panel w3-large">'.$_GET["info"].'</p>
+        </div>
+    </div>
+<%} else if(false) {%>
+    <div id="msgError" class="w3-modal" onclick="closeMsg('msgError')" style="display: block; cursor: pointer;">
+        <div class="w3-container w3-modal-content w3-leftbar w3-border-red w3-pale-red">
+            <h4>错误: </h4>
+            <p class="w3-container w3-panel w3-large">'.$_GET["error"].'</p>
+        </div>
+    </div>
+<%}%>
+
+<!-- Modal： Login -->
+<%if(guest) {%>
     <div id="modelLogin" class="w3-modal w3-animate-opacity">
         <div class="w3-card-4 w3-modal-content" style="display: block; max-width: 35%; min-width: 350px;">
             <div class="w3-container w3-blue">
@@ -119,8 +132,8 @@
     </div>
 <%}%>
 
-    <!-- Modal： Register -->
-<%if(user!=null||signinerror) {%>
+<!-- Modal： Register -->
+<%if(guest) {%>
     <div id="modelSignin" class="w3-modal w3-animate-opacity">
         <div class="w3-card-4 w3-modal-content" style="display: block; max-width: 42%; min-width: 350px;">
             <div class="w3-container w3-indigo">
@@ -155,7 +168,37 @@
     </div>
 <%}%>
 
-</nav>
+<!-- Modal: Settings -->
+<%if(!guest) {%>
+    <div id="modelSettings" class="w3-modal">
+        <div class="w3-card-4 w3-modal-content" style="display: block; max-width: 42%; min-width: 350px;">
+            <div class="w3-container w3-blue">
+                <span class="w3-closebtn" onclick="modelManager('modelSettings','close')">×</span>
+                <h2 class="w3-center w3-text-white">设置</h2>
+            </div>
+            <div class="w3-container w3-white">
+                <form class="w3-form" method="post" action="Settings.action">
+                    <div class="w3-input-group">
+                        <label class="w3-label w3-validate">昵称：</label>
+                        <input name="user.nickname" class="w3-input" type="text" value="<%=user.getNickname()%>">
+                    </div>
+                    <div class="w3-input-group">
+                        <label class="w3-label w3-validate">邮箱</label>
+                        <input name="user.email" class="w3-input" type="email" value="<%=user.getEmail()%>">
+                    </div>
+                    <div class="w3-input-group">
+                        <label class="w3-label w3-validate">新密码：</label>
+                        <input name="user.password" class="w3-input" type="password">
+                    </div>
+                    <div class="w3-input-group">
+                        <input class="w3-input w3-blue w3-hover-opacity" type="submit" value="更新设置">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<%}%>
+</article>
 
 <style>
     a {
@@ -170,6 +213,9 @@
         } else {
             document.getElementById(modal).style.display = "none";
         }
+    }
+    function closeMsg(modal) {
+        document.getElementById(modal).style.display = "none";
     }
     function confirmLeave() {
         if(confirm("确定离开这个Chest？")) {

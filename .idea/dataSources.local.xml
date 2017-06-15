@@ -7,6 +7,7 @@
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+      <secret-storage>master_key</secret-storage>
       <user-name>wind</user-name>
       <introspection-schemas>*:windchest</introspection-schemas>
     </data-source>
@@ -26,6 +27,7 @@
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+      <secret-storage>master_key</secret-storage>
       <user-name>wind</user-name>
       <introspection-schemas>*:windchest</introspection-schemas>
     </data-source>

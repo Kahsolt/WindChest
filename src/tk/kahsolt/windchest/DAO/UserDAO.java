@@ -10,6 +10,8 @@ import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 import tk.kahsolt.windchest.entity.UserEntity;
 
+import javax.jws.soap.SOAPBinding;
+
 /**
  * Created by kahsolt on 17-6-7.
  */
@@ -24,7 +26,7 @@ public class UserDAO extends HibernateDaoSupport {
     public static final String PASSWORD = "password";
 
     public static UserDAO getFromApplicationContext(ApplicationContext ctx) {
-        return (UserDAO) ctx.getBean("UserDAO");
+        return (UserDAO) ctx.getBean("userDao");
     }
 
     public void save(UserEntity transientInstance) {
@@ -49,10 +51,23 @@ public class UserDAO extends HibernateDaoSupport {
         }
     }
 
+    public UserEntity update(UserEntity persistentInstance) {
+        log.debug("updating UserEntity instance");
+        try {
+            getHibernateTemplate().update(persistentInstance);
+            UserEntity result = (UserEntity) findByUsername(persistentInstance.getUsername()).get(0);
+            log.debug("update successful");
+            return result;
+        } catch (RuntimeException re) {
+            log.error("update failed", re);
+            throw re;
+        }
+    }
+
     public UserEntity findById(java.lang.Integer id) {
         log.debug("getting User instance with id: " + id);
         try {
-            UserEntity instance = (UserEntity) getHibernateTemplate().get("tk.kahsolt.windchest.UserEntity", id);
+            UserEntity instance = (UserEntity) getHibernateTemplate().get("tk.kahsolt.windchest.entity.UserEntity", id);
             return instance;
         } catch (RuntimeException re) {
             log.error("getById failed", re);

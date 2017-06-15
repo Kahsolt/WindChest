@@ -19,6 +19,7 @@
           <element id="library" level="project" name="commons-beanutils-1.9.2" />
           <element id="library" level="project" name="juli-6.0.18" />
           <element id="library" level="project" name="aspectjweaver-1.5.3" />
+          <element id="library" level="project" name="javax.mail:mail:1.4.7" />
         </element>
       </element>
     </root>

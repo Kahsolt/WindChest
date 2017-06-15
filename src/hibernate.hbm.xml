@@ -23,16 +23,16 @@
             <column name="username" sql-type="varchar(32)" length="32"/>
         </property>
         <property name="nickname">
-            <column name="nickname" sql-type="varchar(32)" length="32" not-null="false"/>
+            <column name="nickname" sql-type="varchar(32)" length="32"/>
         </property>
         <property name="password">
             <column name="password" sql-type="varchar(32)" length="32"/>
         </property>
         <property name="email">
-            <column name="email" sql-type="varchar(64)" length="64" not-null="false"/>
+            <column name="email" sql-type="varchar(64)" length="64"/>
         </property>
         <property name="avatar">
-            <column name="avatar" sql-type="varchar(512)" length="512" not-null="false"/>
+            <column name="avatar" sql-type="varchar(512)" length="512"/>
         </property>
     </class>
     <class name="tk.kahsolt.windchest.entity.WindEntity" table="wind" schema="windchest">
@@ -52,7 +52,7 @@
             <column name="text" sql-type="text" not-null="true"/>
         </property>
         <property name="path">
-            <column name="path" sql-type="varchar(512)" length="512" not-null="false"/>
+            <column name="path" sql-type="varchar(512)" length="512"/>
         </property>
         <property name="time">
             <column name="time" sql-type="timestamp"/>

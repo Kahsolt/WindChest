@@ -3,7 +3,9 @@ package tk.kahsolt.windchest.service;
 import javax.annotation.Resource;
 import java.util.List;
 
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
+import sun.nio.cs.US_ASCII;
 import tk.kahsolt.windchest.DAO.UserDAO;
 import tk.kahsolt.windchest.entity.UserEntity;
 
@@ -41,9 +43,21 @@ public class UserService {
             return null;
         }
     }
-    public UserEntity updateinfo(UserEntity user) {
-        userDao.merge(user);
-        return (UserEntity)userDao.findByUsername(user.getUsername()).get(0);
+    public UserEntity updateinfo(UserEntity user, UserEntity oldUser) {
+        if(user.getNickname()!=null&&!user.getNickname().equals("")) {
+            oldUser.setNickname(user.getNickname());
+        }
+        if(user.getPassword()!=null&&!user.getPassword().equals("")) {
+            oldUser.setPassword(user.getPassword());
+        }
+        if(user.getAvatar()!=null&&!user.getAvatar().equals("")) {
+            oldUser.setAvatar(user.getAvatar());
+        }
+        if(user.getEmail()!=null&&!user.getEmail().equals("")) {
+            oldUser.setEmail(user.getEmail());
+        }
+        userDao.update(oldUser);
+        return (UserEntity)userDao.findByUsername(oldUser.getUsername()).get(0);
     }
     public boolean leaveout(UserEntity user) {
         List res=userDao.findByUsername(user.getUsername());

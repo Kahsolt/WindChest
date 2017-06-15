@@ -15,7 +15,11 @@
     </context-param>
     <context-param>
         <param-name>org.apache.tomcat.websocket.binaryBufferSize</param-name>
-        <param-value>32768</param-value>
+        <param-value>52428800</param-value>
+    </context-param>
+    <context-param>
+        <param-name>org.apache.tomcat.websocket.BLOCKING_SEND_TIMEOUT</param-name>
+        <param-value>-1</param-value>
     </context-param>
 
     <!--Spring4配置文件-->
@@ -46,14 +50,6 @@
     <servlet-mapping>
         <servlet-name>test</servlet-name>
         <url-pattern>/test</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>upload</servlet-name>
-        <servlet-class>tk.kahsolt.windchest.servlet.UploadServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>upload</servlet-name>
-        <url-pattern>/upload</url-pattern>
     </servlet-mapping>
 
     <!--拦截器-->

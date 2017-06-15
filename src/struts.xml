@@ -11,7 +11,7 @@
     <constant name="struts.serve.static.browserCache" value="false" />
     <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
     <constant name="struts.multipart.saveDir" value="/tmp/"/>
-    <constant name="struts.multipart.maxSize" value="52428800"/>
+    <constant name="struts.multipart.maxSize" value="102420000"/>
     <constant name="struts.configuration.xml.reload" value="true"/>
     <constant name="struts.devMode" value="true"/>
 
@@ -25,6 +25,9 @@
         <action name="Logout" class="userAction" method="logout">
             <result>index.jsp</result>
         </action>
+        <action name="Settings" class="userAction" method="settings">
+            <result>WEB-INF/windchest.jsp</result>
+        </action>
         <action name="Signin" class="userAction" method="signin">
             <result name="success">WEB-INF/windchest.jsp</result>
             <result name="error">index.jsp</result>
@@ -35,7 +38,7 @@
         </action>
 
         <action name="Enter" class="chestAction" method="enter">
-            <result>WEB-INF/windchest.jsp</result>
+            <result name="success">WEB-INF/windchest.jsp</result>
         </action>
         <action name="Leave" class="chestAction" method="leave">
             <result>index.jsp</result>
@@ -45,10 +48,16 @@
             <result name="success">WEB-INF/windchest.jsp</result>
             <result name="error">WEB-INF/windchest.jsp?error=upload</result>
             <interceptor-ref name="fileUploadStack">
-                <param name="fileUpload.maximumSize">52428800</param>
+                <param name="fileUpload.maximumSize">102420000</param>
             </interceptor-ref>
             <interceptor-ref name="defaultStack" />
         </action>
+
+        <action name="Mail" class="mailAction" method="send">
+            <result name="success">WEB-INF/mailfeedback.jsp</result>
+            <result name="error">WEB-INF/mailfeedback.jsp</result>
+        </action>
+
     </package>
 
 </struts>
